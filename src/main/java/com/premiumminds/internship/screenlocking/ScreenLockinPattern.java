@@ -54,6 +54,5 @@ class ScreenLockinPattern implements IScreenLockinPattern {
     }
 
     return count;
-
   }
 }
