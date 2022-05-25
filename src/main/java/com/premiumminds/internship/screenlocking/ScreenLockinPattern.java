@@ -39,6 +39,19 @@ class ScreenLockinPattern implements IScreenLockinPattern {
     }});
   };
 
+  private ArrayList<Getter> getterList = new ArrayList<Getter>() {
+    {
+      add( new GetRight());
+      add( new GetLeft());
+      add( new GetUp());
+      add( new GetDown());
+      add( new GetUp_Right());
+      add( new GetUp_Left());
+      add( new GetDown_Right());
+      add( new GetDown_Left());
+    }
+  };
+
   private Integer recursiveCountPattern(ArrayList<Integer> visited, Integer visiting, int remainLength){
     if (visited.contains(visiting)){
       return new Integer(0);
@@ -58,19 +71,10 @@ class ScreenLockinPattern implements IScreenLockinPattern {
 
   private ArrayList<Integer> adjacentPoints(int point, int matrixSize, ArrayList<Integer> visited){
     ArrayList<Integer> adjacentPoints = new ArrayList<Integer>();
-    ArrayList<Getter> getters = new ArrayList<Getter>();
-    getters.add( new GetRight());
-    getters.add( new GetLeft());
-    getters.add( new GetUp());
-    getters.add( new GetDown());
-    getters.add( new GetUp_Right());
-    getters.add( new GetUp_Left());
-    getters.add( new GetDown_Right());
-    getters.add( new GetDown_Left());
 
     Integer to_add;
   
-    for(Getter getter: getters){
+    for(Getter getter: getterList){
       to_add = getter.getAdjacentPoint(point, matrixSize, visited);
       if (to_add != null)
         adjacentPoints.add(to_add);
@@ -83,8 +87,6 @@ class ScreenLockinPattern implements IScreenLockinPattern {
     public Integer getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited);
   }
 
-
-  // TODO -> improve, a lot of repeated code
   private class GetRight implements Getter{
     public Integer getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point >= matrixSize * matrixSize)
@@ -178,4 +180,5 @@ class ScreenLockinPattern implements IScreenLockinPattern {
       return getAdjacentPoint(point + (matrixSize + 1), matrixSize, visited);
     }
   }
+  
 }
