@@ -1,10 +1,12 @@
 package com.premiumminds.internship.screenlocking;
 
+import com.premiumminds.internship.screenlocking.exceptions.ErrorMessage;
+import com.premiumminds.internship.screenlocking.exceptions.ScreenLockinException;
+
 import java.util.concurrent.Future;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 
 import java.util.ArrayList;
 
@@ -19,9 +21,13 @@ class ScreenLockinPattern implements IScreenLockinPattern {
   * @param length the number of points used in pattern
   * @return number of patterns
   */
-  public Future<Integer> countPatternsFrom(int firstPoint,int length) {
-    // TODO -> Check if firstPoint inside of matrix
-    // TODO -> Check if length greater then 0 and less then 10
+  public Future<Integer> countPatternsFrom(int firstPoint,int length) throws ScreenLockinException {
+    if (firstPoint < 1 || firstPoint > 9){
+      throw new ScreenLockinException(ErrorMessage.SCREEN_POINT_OUT_OF_RANGE);
+    }
+    if (length < 1 || length > 9){
+      throw new ScreenLockinException(ErrorMessage.INVALID_PATTERN_LENGTH);
+    }
 
     ExecutorService executorService = Executors.newSingleThreadExecutor();
 
@@ -52,7 +58,6 @@ class ScreenLockinPattern implements IScreenLockinPattern {
 
   private ArrayList<Integer> adjacentPoints(int point, int matrixSize, ArrayList<Integer> visited){
     ArrayList<Integer> adjacentPoints = new ArrayList<Integer>();
-    // TODO -> Create Object for this, static one, so that it doesn't need to create all this everytime
     ArrayList<Getter> getters = new ArrayList<Getter>();
     getters.add( new GetRight());
     getters.add( new GetLeft());
