@@ -6,6 +6,8 @@ import com.premiumminds.internship.screenlocking.exceptions.ScreenLockinExceptio
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import java.util.Arrays;
+
 
 class ScreenLockinMatrix {
 
@@ -69,77 +71,70 @@ class ScreenLockinMatrix {
     return subMap;
   }
 
-  private interface Getter {
-    public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited);
+  private static abstract class Getter {
+    public abstract ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited);
   }
 
-  private static class GetRight implements Getter{
+  private static class GetRight extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
-      if (point >= matrixSize * matrixSize || point % matrixSize == 0)
+      if (point % matrixSize == 0)
         return new ArrayList<Integer>();
       
-      if (!visited.contains(point + 1)){
-        ArrayList<Integer> right = new ArrayList<Integer>();
-        right.add(point + 1);
-        return right;
-      }
+      point = point + 1;
+      if (!visited.contains(point))
+        return new ArrayList<Integer>(Arrays.asList(point));
 
       visited.add(point);
-      return adjacentPoints(point + 1, matrixSize, visited, getGettersFromPrefix("Right"));
+      return adjacentPoints(point, matrixSize, visited, getGettersFromPrefix("Right"));
     }
   }
 
-  private static class GetLeft implements Getter{
+  private static class GetLeft extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
-      if (point <= 1 || point % matrixSize == 1)
+      if (point % matrixSize == 1)
         return new ArrayList<Integer>();
       
-      if (!visited.contains(point - 1)){
-        ArrayList<Integer> left = new ArrayList<Integer>();
-        left.add(point - 1);
-        return left;
-      }
+      point = point - 1;
+      if (!visited.contains(point))
+        return new ArrayList<Integer>(Arrays.asList(point));;
+
       
       visited.add(point);
-      return adjacentPoints(point - 1, matrixSize, visited, getGettersFromPrefix("Left"));
+      return adjacentPoints(point, matrixSize, visited, getGettersFromPrefix("Left"));
     }
   }
 
-  private static class GetDown implements Getter{
+  private static class GetDown extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1))
         return new ArrayList<Integer>();
       
-      if (!visited.contains(point + matrixSize)){
-        ArrayList<Integer> down = new ArrayList<Integer>();
-        down.add(point + matrixSize);
-        return down;
-      }
+      point = point + matrixSize;
+      if (!visited.contains(point))
+        return new ArrayList<Integer>(Arrays.asList(point));;
 
       visited.add(point);
-      return adjacentPoints(point + matrixSize, matrixSize, visited, getGettersFromPrefix("Down"));
+      return adjacentPoints(point, matrixSize, visited, getGettersFromPrefix("Down"));
     }
   }
 
-  private static class GetUp implements Getter{
+  private static class GetUp extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point <= matrixSize)
         return new ArrayList<Integer>();
-      
-      if (!visited.contains(point - matrixSize)){
-        ArrayList<Integer> up = new ArrayList<Integer>();
-        up.add(point - matrixSize);
-        return up;
-      }
+
+      point = point - matrixSize;
+      if (!visited.contains(point))
+        return new ArrayList<Integer>(Arrays.asList(point));;
 
       visited.add(point);
-      return adjacentPoints(point - matrixSize, matrixSize, visited, getGettersFromPrefix("Up"));
+      return adjacentPoints(point, matrixSize, visited, getGettersFromPrefix("Up"));
     }
   }
 
-  private static class GetUp_Left implements Getter{
+  private static class GetUp_Left extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
-      if (point <= 1 || point <= matrixSize || point % matrixSize == 1)
+      if (point <= matrixSize || point % matrixSize == 1)
         return new ArrayList<Integer>();
       
       ArrayList<Integer> up_left = new ArrayList<Integer>();
@@ -147,7 +142,7 @@ class ScreenLockinMatrix {
       point = point - matrixSize - 1;
       up_left.addAll(adjacentPoints(point, matrixSize, visited, getGettersFromPrefix(new String[]{"Above", "West"})));
 
-      if (!visited.contains(point )){
+      if (!visited.contains(point)){
         up_left.add(point);
         return up_left;
       }
@@ -157,9 +152,9 @@ class ScreenLockinMatrix {
     }
   }
 
-  private static class GetUp_Right implements Getter{
+  private static class GetUp_Right extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
-      if (point <= 1 || point <= matrixSize || point % matrixSize == 0)
+      if (point <= matrixSize || point % matrixSize == 0)
         return new ArrayList<Integer>();
       
       ArrayList<Integer> up_right = new ArrayList<Integer>();
@@ -176,7 +171,7 @@ class ScreenLockinMatrix {
     }
   }
   
-  private static class GetDown_Left implements Getter{
+  private static class GetDown_Left extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1) || point % matrixSize == 1)
         return new ArrayList<Integer>();
@@ -194,7 +189,7 @@ class ScreenLockinMatrix {
     }
   }
 
-  private static class GetDown_Right implements Getter{
+  private static class GetDown_Right extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1) || point % matrixSize == 0)
         return new ArrayList<Integer>();
@@ -213,7 +208,7 @@ class ScreenLockinMatrix {
     }
   }
 
-  private static class GetAbove implements Getter{
+  private static class GetAbove extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point <= matrixSize)
         return new ArrayList<Integer>();
@@ -229,7 +224,7 @@ class ScreenLockinMatrix {
     }
   }
 
-  private static class GetBelow implements Getter{
+  private static class GetBelow extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1))
         return new ArrayList<Integer>();
@@ -246,7 +241,7 @@ class ScreenLockinMatrix {
     }
   }
 
-  private static class GetWest implements Getter{
+  private static class GetWest extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point % matrixSize == 1)
         return new ArrayList<Integer>();
@@ -262,7 +257,7 @@ class ScreenLockinMatrix {
     }
   }
   
-  private static class GetEast implements Getter{
+  private static class GetEast extends Getter{
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point % matrixSize == 0)
         return new ArrayList<Integer>();
