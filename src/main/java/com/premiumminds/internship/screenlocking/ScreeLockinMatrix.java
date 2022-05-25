@@ -33,6 +33,9 @@ class ScreenLockinMatrix {
   }
 
   public static ArrayList<Integer> adjacentPoints(int point, int matrixSize, ArrayList<Integer> visited, TreeMap<String, Getter> getters){
+    /* 
+      Returns the points adjacents to the point passed as argument depending on the selected getters
+     */
     if (point < 1 || point > 9){
       throw new ScreenLockinException(ErrorMessage.SCREEN_POINT_OUT_OF_RANGE);
     }
@@ -76,6 +79,9 @@ class ScreenLockinMatrix {
   }
 
   private static class GetRight extends Getter{
+    /* 
+      Finds the Point to the Right. If already Visited it tries to find the one two spaces to the right
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point % matrixSize == 0)
         return new ArrayList<Integer>();
@@ -90,6 +96,9 @@ class ScreenLockinMatrix {
   }
 
   private static class GetLeft extends Getter{
+    /* 
+      Finds the Point to the Left. If already Visited it tries to find the one two spaces to the Left
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point % matrixSize == 1)
         return new ArrayList<Integer>();
@@ -105,6 +114,9 @@ class ScreenLockinMatrix {
   }
 
   private static class GetDown extends Getter{
+    /* 
+      Finds the Point to the Down. If already Visited it tries to find the one two spaces to the Down
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1))
         return new ArrayList<Integer>();
@@ -119,6 +131,9 @@ class ScreenLockinMatrix {
   }
 
   private static class GetUp extends Getter{
+    /* 
+      Finds the Point to the Up. If already Visited it tries to find the one two spaces to the Up
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point <= matrixSize)
         return new ArrayList<Integer>();
@@ -133,6 +148,10 @@ class ScreenLockinMatrix {
   }
 
   private static class GetUp_Left extends Getter{
+    /* 
+      Finds the Point to the Up-Left Diagonal. If already Visited it tries to find the one two spaces to the Up-Left Diagonal
+      It also stores, if not visited, the points above and to the left of itself
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point <= matrixSize || point % matrixSize == 1)
         return new ArrayList<Integer>();
@@ -140,6 +159,7 @@ class ScreenLockinMatrix {
       ArrayList<Integer> up_left = new ArrayList<Integer>();
       visited.add(point);
       point = point - matrixSize - 1;
+
       up_left.addAll(adjacentPoints(point, matrixSize, visited, getGettersFromPrefix(new String[]{"Above", "West"})));
 
       if (!visited.contains(point)){
@@ -153,6 +173,10 @@ class ScreenLockinMatrix {
   }
 
   private static class GetUp_Right extends Getter{
+    /* 
+      Finds the Point to the Up-Right Diagonal. If already Visited it tries to find the one two spaces to the Up-Right Diagonal
+      It also stores, if not visited, the points above and to the right of itself
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point <= matrixSize || point % matrixSize == 0)
         return new ArrayList<Integer>();
@@ -160,7 +184,9 @@ class ScreenLockinMatrix {
       ArrayList<Integer> up_right = new ArrayList<Integer>();
       visited.add(point);
       point = point - matrixSize + 1;
+
       up_right.addAll(adjacentPoints(point, matrixSize, visited, getGettersFromPrefix(new String[]{"Above", "East"})));
+
       if (!visited.contains(point)){
         up_right.add(point);
         return up_right;
@@ -172,6 +198,10 @@ class ScreenLockinMatrix {
   }
   
   private static class GetDown_Left extends Getter{
+    /* 
+      Finds the Point to the Down-Left Diagonal. If already Visited it tries to find the one two spaces to the Down-Left Diagonal
+      It also stores, if not visited, the points below and to the left of itself
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1) || point % matrixSize == 1)
         return new ArrayList<Integer>();
@@ -179,7 +209,9 @@ class ScreenLockinMatrix {
       ArrayList<Integer> down_left = new ArrayList<Integer>();
       visited.add(point);
       point = point + matrixSize - 1;
+
       down_left.addAll(adjacentPoints(point, matrixSize, visited, getGettersFromPrefix(new String[]{"Below", "West"})));
+
       if (!visited.contains(point)){
         down_left.add(point);
         return down_left;
@@ -190,6 +222,10 @@ class ScreenLockinMatrix {
   }
 
   private static class GetDown_Right extends Getter{
+    /* 
+      Finds the Point to the Down-Right Diagonal. If already Visited it tries to find the one two spaces to the Down-Right Diagonal
+      It also stores, if not visited, the points below and to the right of itself
+     */
     public ArrayList<Integer> getAdjacentPoint(int point, int matrixSize, ArrayList<Integer> visited){
       if (point > matrixSize * (matrixSize - 1) || point % matrixSize == 0)
         return new ArrayList<Integer>();
@@ -197,7 +233,9 @@ class ScreenLockinMatrix {
       ArrayList<Integer> down_right = new ArrayList<Integer>();
       visited.add(point);
       point = point + matrixSize + 1;
+
       down_right.addAll(adjacentPoints(point, matrixSize, visited, getGettersFromPrefix(new String[]{"Below", "East"})));
+
       if (!visited.contains(point)){
         down_right.add(point);
         return down_right;
