@@ -52,7 +52,6 @@ class ScreenLockinMatrix {
       }
     }
 
-    System.out.println("FOR: " + point + " ADJACENT: " + adjacentPoints);
     return adjacentPoints;
   }
 

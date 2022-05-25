@@ -33,8 +33,6 @@ class ScreenLockinPattern implements IScreenLockinPattern {
 
     final Integer result = recursiveCountPattern(new ArrayList<Integer>(), new Integer(firstPoint), length);
 
-    System.out.println("FINAL: " + result);
-
     return executorService.submit( new Callable<Integer>() {
       public Integer call(){
         return result;
@@ -46,14 +44,11 @@ class ScreenLockinPattern implements IScreenLockinPattern {
       return new Integer(0);
     }
     if (remainLength == 1){
-      visited.add(visiting);
-      System.out.println(visited);
       return new Integer(1);
     }
 
     Integer count = new Integer(0);
     visited.add(visiting);
-    System.out.println(visited);
     for (Integer adjacent: ScreenLockinMatrix.adjacentPoints(visiting, 3, visited)){
       count += recursiveCountPattern(new ArrayList<Integer>(visited), adjacent, remainLength - 1);
     }
