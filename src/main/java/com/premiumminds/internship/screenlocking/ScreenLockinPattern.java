@@ -40,6 +40,9 @@ class ScreenLockinPattern implements IScreenLockinPattern {
   };
 
   private Integer recursiveCountPattern(ArrayList<Integer> visited, Integer visiting, int remainLength) throws ScreenLockinException{
+    /* 
+      It Recursivly looks for all possible combinations
+     */
     if (visited.contains(visiting)){
       return new Integer(0);
     }
@@ -54,6 +57,5 @@ class ScreenLockinPattern implements IScreenLockinPattern {
     }
 
     return count;
-
   }
 }

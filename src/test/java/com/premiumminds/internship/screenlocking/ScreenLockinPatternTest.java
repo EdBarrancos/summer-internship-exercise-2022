@@ -35,6 +35,42 @@ public class ScreenLockinPatternTest {
   @Rule
   public ExpectedException expectedEx = ExpectedException.none();
 
+  @Test
+  public void ScreenLockinPatternTestPointOutOfRange1() throws InterruptedException, ExecutionException, TimeoutException {
+    expectedEx.expect(ScreenLockinException.class);
+    expectedEx.expectMessage(ErrorMessage.SCREEN_POINT_OUT_OF_RANGE.label);
+    // TODO -> Parameterization?
+    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(0, 2);
+    Integer result = count.get(1, TimeUnit.SECONDS);
+  }
+
+  @Test
+  public void ScreenLockinPatternTestPointOutOfRange2() throws InterruptedException, ExecutionException, TimeoutException {
+    expectedEx.expect(ScreenLockinException.class);
+    expectedEx.expectMessage(ErrorMessage.SCREEN_POINT_OUT_OF_RANGE.label);
+    // TODO -> Parameterization?
+    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(10, 2);
+    Integer result = count.get(1, TimeUnit.SECONDS);
+  }
+
+  @Test
+  public void ScreenLockinPatternTestInvalidLength1() throws InterruptedException, ExecutionException, TimeoutException {
+    expectedEx.expect(ScreenLockinException.class);
+    expectedEx.expectMessage(ErrorMessage.INVALID_PATTERN_LENGTH.label);
+    // TODO -> Parameterization?
+    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(1, 0);
+    Integer result = count.get(1, TimeUnit.SECONDS);
+  }
+
+  @Test
+  public void ScreenLockinPatternTestInvalidLength2() throws InterruptedException, ExecutionException, TimeoutException {
+    expectedEx.expect(ScreenLockinException.class);
+    expectedEx.expectMessage(ErrorMessage.INVALID_PATTERN_LENGTH.label);
+    // TODO -> Parameterization?
+    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(1, 10);
+    Integer result = count.get(1, TimeUnit.SECONDS);
+  }
+
 
   @Test
   public void ScreenLockinPatternTestFirst3Length2Test()  throws InterruptedException, ExecutionException, TimeoutException {
@@ -44,27 +80,16 @@ public class ScreenLockinPatternTest {
   }
 
   @Test
-  public void ScreenLockinPatternTestPointOutOfRange() throws InterruptedException, ExecutionException, TimeoutException {
-    expectedEx.expect(ScreenLockinException.class);
-    expectedEx.expectMessage(ErrorMessage.SCREEN_POINT_OUT_OF_RANGE.label);
-    // TODO -> Parameterization?
-    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(0, 2);
-    Integer result = count.get(1, TimeUnit.SECONDS);
-  }
-
-  @Test
-  public void ScreenLockinPatternTestInvalidLength() throws InterruptedException, ExecutionException, TimeoutException {
-    expectedEx.expect(ScreenLockinException.class);
-    expectedEx.expectMessage(ErrorMessage.INVALID_PATTERN_LENGTH.label);
-    // TODO -> Parameterization?
-    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(1, 0);
-    Integer result = count.get(1, TimeUnit.SECONDS);
-  }
-
-  @Test
   public void ScreenLockinPatternTestFirst1Length5Test() throws InterruptedException, ExecutionException, TimeoutException {
     Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(1, 5);
     Integer result = count.get(10, TimeUnit.SECONDS);
     assertEquals(684, result.intValue()); // Used "https://github.com/delight-im/AndroidPatternLock"
+  }
+
+  @Test
+  public void ScreenLockinPatternTestFirst4Length3Test() throws InterruptedException, ExecutionException, TimeoutException {
+    Future<Integer> count  = new ScreenLockinPattern().countPatternsFrom(4, 3);
+    Integer result = count.get(10, TimeUnit.SECONDS);
+    assertEquals(37, result.intValue());
   }
 }
