@@ -31,12 +31,9 @@ class ScreenLockinPattern implements IScreenLockinPattern {
 
     ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    final Integer result = recursiveCountPattern(new ArrayList<Integer>(), new Integer(firstPoint), length);
-
-    return executorService.submit( new Callable<Integer>() {
-      public Integer call(){
-        return result;
-    }});
+    return executorService.submit( ()-> {
+      return recursiveCountPattern(new ArrayList<Integer>(), new ArrayList<Integer>(), new Integer(firstPoint), length);
+    });
   };
 
   private Integer recursiveCountPattern(ArrayList<Integer> visited, Integer visiting, int remainLength) throws ScreenLockinException{
