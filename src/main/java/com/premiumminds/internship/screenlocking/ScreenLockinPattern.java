@@ -32,24 +32,39 @@ class ScreenLockinPattern implements IScreenLockinPattern {
     ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     return executorService.submit( ()-> {
-      return recursiveCountPattern(new ArrayList<Integer>(), new ArrayList<Integer>(), new Integer(firstPoint), length);
+      return recursiveCountPattern(new ArrayList<Integer>(), new Integer(firstPoint), length);
     });
   };
 
-  private Integer recursiveCountPattern(ArrayList<Integer> visited, Integer visiting, int remainLength) throws ScreenLockinException{
+  private Integer recursiveCountPattern(ArrayList<Integer> visited,  Integer visiting, int remainLength) throws ScreenLockinException{
     /* 
-      It Recursivly looks for all possible combinations
+      Recursivly looks for all possible combinations
      */
     if (visited.contains(visiting)){
-      return new Integer(0);
+      return 0;
     }
     if (remainLength == 1){
-      return new Integer(1);
+      return 1;
     }
 
-    Integer count = new Integer(0);
+    int count = 0;
     visited.add(visiting);
-    for (Integer adjacent: ScreenLockinMatrix.adjacentPoints(visiting, 3, visited)){
+    ArrayList<Integer> queue = new ArrayList<Integer>(ScreenLockinMatrix.adjacentPoints(visiting, 3));
+    queue.remove(visiting);
+
+    for (Integer adjacent: queue){
+      if (adjacent == visiting)
+        continue;
+
+      if (visited.contains(adjacent)){
+        // If we attempt to visit an already visited point on the matrix, we can instead go over it
+          // We can calculate the new target by subtracting our current position from 2 times the old target
+        int target = 2 * adjacent - visiting;
+        if( target <= 9 &&  target >= 1 && !queue.contains(target))
+          count += recursiveCountPattern(new ArrayList<Integer>(visited), target, remainLength - 1);
+        continue;
+      }
+
       count += recursiveCountPattern(new ArrayList<Integer>(visited), adjacent, remainLength - 1);
     }
 
